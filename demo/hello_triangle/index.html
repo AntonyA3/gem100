@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head >
+        <meta charset="UTF-8">
+        <title>Hello Triangle</title>
+        
+    </head>
+    <body>
+        <canvas id="canvas0" width="640" height="480" style="border: black 1px solid;"></canvas>
+        <script type="x-shader/x-vertex" id="hello-vert">
+            #version 100
+            attribute vec3 vPos;
+            attribute vec3 vColor;
+            varying vec3 fColor;
+
+            void main() {
+                fColor = vColor;
+                gl_Position = vec4(vPos, 1.0);
+            }
+        </script>
+
+        <script type="x-shader/x-fragment" id="hello-frag">
+            #version 100
+            precision mediump float;
+            varying vec3 fColor;
+
+            void main() {
+                gl_FragColor = vec4(fColor, 1.0);
+            }
+            </script>
+            
+        <script src="./hello_triangle.js"></script>
+
+    </body>
+    
+</html>
