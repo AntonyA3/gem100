@@ -3,7 +3,7 @@
 const FPS = 60
 const canvas0 = document.getElementById('canvas0')
 const gl = canvas0.getContext('webgl')
-const hostName = 'http://localhost:8000'
+const path = 'http://localhost:8000/demo/hello_cube'
 
 const mat4 = glMatrix.mat4
 const vec3 = glMatrix.vec3
@@ -122,7 +122,7 @@ function main() {
         switch(state){
             case LOADING:
                 if(ShaderProgramLoader.state == ShaderProgramLoader.READY){
-                    ShaderProgramLoader.getShaderText( hostName + '/hello_cube/shader/flat.vert', hostName + '/hello_cube/shader/flat.frag')  
+                    ShaderProgramLoader.getShaderText( path + '/flat.vert', path + '/flat.frag')  
                 }else if(ShaderProgramLoader.state == ShaderProgramLoader.FAILED){
                     console.log("failed to load shader")
                     shouldUpdate = false
@@ -144,24 +144,23 @@ function main() {
                 break
             case ACTIVE:
                 if(shouldUpdate){
-
-                    
-                    let projection = mat4.create()
-                    mat4.perspective(projection,Math.PI *0.5,640 / 480, 1.0, 100.0)
                     let translation = vec3.create()
                     let rotY = mat4.create()
                     let rotX = mat4.create()
+                    let projection = mat4.create()                    
+                    let translationMat = mat4.create()
+                    let camMat = mat4.create()
+                    let viewMatrix = mat4.create()
+
+                    mat4.perspective(projection,Math.PI *0.5,640 / 480, 1.0, 100.0)
                     mat4.fromYRotation(rotY, time * 0.001)
                     mat4.fromXRotation(rotX, time * 0.002)
                     vec3.set(translation, 0, 0, 10)
-
-                    let camMat = mat4.create()
-                    let translationMat = mat4.create()
-                    let viewMatrix = mat4.create()
                     mat4.fromTranslation(translationMat, translation)
                     mat4.multiply(camMat, rotY, translationMat)
                     mat4.multiply(camMat, rotX, camMat)
                     mat4.invert(viewMatrix, camMat)
+                    
                     gl.viewport(0,0, gl.drawingBufferWidth, gl.drawingBufferHeight)
                     gl.enable(gl.DEPTH_TEST)
                     gl.clearColor(0.5,0.5, 0.5, 1.0)
